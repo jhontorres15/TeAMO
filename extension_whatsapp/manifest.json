@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Amor Automático - WhatsApp Inyector",
+  "version": "2.0",
+  "description": "Robot invisible que escucha Firebase y envía mensajes desde tu WhatsApp Web",
+  "permissions": [
+    "tabs",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://web.whatsapp.com/*",
+    "https://novia-540ac-default-rtdb.firebaseio.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://web.whatsapp.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
