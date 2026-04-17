@@ -337,33 +337,96 @@
       margin-bottom: 4px;
     }
 
-    .dots {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: center;
+    /* ─── WATER HEART PROGRESS ─── */
+    .water-heart-wrapper {
+      filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.5));
     }
 
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255, 133, 161, 0.25);
-      border: 1.5px solid rgba(255, 133, 161, 0.4);
-      transition: background 0.4s, transform 0.4s, box-shadow 0.4s;
+    .water-heart {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 10px auto 15px auto;
+      background: rgba(255, 133, 161, 0.2);
+      -webkit-mask-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='black'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='black'/%3E%3C/svg%3E");
+      -webkit-mask-size: 100%;
+      mask-size: 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      overflow: hidden;
+      transition: transform 0.3s;
     }
 
-    .dot.done {
-      background: var(--rose);
-      box-shadow: 0 0 8px var(--rose);
-      transform: scale(1.2);
+    .water-fill {
+      position: absolute;
+      top: 100%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(0deg, var(--rose) 0%, rgba(255, 133, 161, 0.8) 100%);
+      border-radius: 40%;
+      animation: spinWater 6s infinite linear;
+      transition: top 1s ease-in-out;
     }
 
-    .dot.final {
-      background: var(--gold);
-      box-shadow: 0 0 14px var(--gold);
-      transform: scale(1.35);
+    @keyframes spinWater {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .water-heart.overflow {
+      animation: overflowHeart 1s infinite alternate;
+    }
+
+    @keyframes overflowHeart {
+      0% {
+        transform: scale(1);
+        filter: brightness(1) drop-shadow(0 0 15px var(--rose));
+      }
+
+      100% {
+        transform: scale(1.15);
+        filter: brightness(1.2) drop-shadow(0 0 35px var(--wine));
+      }
+    }
+
+    .action-prompt-container {
+      opacity: 0;
+      animation: fadeUp 0.9s 1.5s forwards;
+    }
+
+    .action-prompt {
+      margin-top: 10px;
+      margin-bottom: 22px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      animation: pulseText 2s infinite;
+      text-align: center;
+    }
+
+    @keyframes pulseText {
+
+      0%,
+      100% {
+        text-shadow: 0 0 8px var(--gold);
+        transform: scale(1);
+      }
+
+      50% {
+        text-shadow: none;
+        transform: scale(0.98);
+      }
     }
 
     /* preview of next message */
@@ -634,8 +697,16 @@
       <!-- Sequential message progress -->
       <div class="steps-wrap" id="stepsWrap">
         <p class="step-label">💌 Mensajes de amor enviados</p>
-        <div class="dots" id="dotsRow"></div>
+        <div class="water-heart-wrapper">
+          <div class="water-heart" id="waterHeart">
+            <div class="water-fill" id="waterFill"></div>
+          </div>
+        </div>
         <p class="msg-preview" id="msgPreview">Presiona el botón para enviar el primer mensaje ❤️</p>
+      </div>
+
+      <div class="action-prompt-container">
+        <p class="action-prompt">Presiona si quieres saber cuánto te amo 👇</p>
       </div>
 
       <a id="waBtn" class="btn-wa" href="#" target="_blank" rel="noopener noreferrer" onclick="openWhatsApp(event)">
@@ -671,34 +742,18 @@
       messages: [
         { text: "Te amo mucho 💕" },
         { text: "Segundo mensaje, te sigo amando mucho 😍" },
-        { text: "Te amo más que al universo entero ✨" },
+        { text: "Amo tu sonrisa ✨" },
         { text: "Más que tus padres (se tenía que decir) 🤫" },
         { text: "¡Mucho más que el cobrador de impuestos! 🏃💨" },
         { text: "Te amo más que a dormir hasta tarde 🛌" },
         { text: "Más que al wifi gratis sin clave 📶" },
         { text: "Te amo nivel: te doy mi último trozo de pizza 🍕" },
-        { text: "De aquí a la luna y de regreso en tortuga 🐢🌙" },
+        { text: "Te amo tanto que te daria mi celular desbloqueado (creo...)🌙" },
         { text: "Eres mi notificación favorita del celular 📱" },
-        { text: "Te amo más que a los viernes por la noche 🎉" },
-        { text: "Si fueras un meme, serías mi favorito de la galería 😂" },
-        { text: "Te amo más que a posponer la alarma por 5 minutitos más ⏰" },
-        { text: "Eres mi mejor hallazgo, como encontrar dinero en el pantalón 💵" },
-        { text: "Te amo más que Netflix preguntándome si sigo viendo 📺" },
-        { text: "Más que a mi película y serie favorita juntas 🍿🎬" },
+        { text: "Te amo nivel: te doy mi último trozo de pizza 🍕" },
         { text: "Mi amor por ti no tiene botón de saltar anuncio 🚫" },
-        { text: "Te amo tanto que hasta te prestaría mi celular desbloqueado (creo...) 😳" },
-        { text: "Eres oficialmente mi persona favorita para molestar todos los días 😈" },
-        { text: "Te amo con la fuerza de mil soles explotando 💥" },
-        { text: "Y con la intensidad del sol de mediodía en verano 🥵" },
-        { text: "Te amo más que enterarme de un buen chisme 👀" },
-        { text: "Eres el 'buenos días' que más me gusta leer ☀️" },
-        { text: "Te amo también cuando te da hambre y te pones de mal humor 🦁" },
-        { text: "Eres mi excepción gigante a absolutamente todo 🌍" },
-        { text: "Contigo el tiempo vuela tan rápido como mi quincena 💸" },
-        { text: "Te amo infinito, más que a mi cama en invierno 🧊" },
-        { text: "Tu sonrisa es más dulce que mi postre favorito 🍰" },
-        { text: "Ya casi se acaban los mensajes, ¡pero mi amor no se acaba nunca! ⏳" },
-        { text: "Eres el amor de mi vida, por siempre y para siempre... ¡Te amo demasiado! 🌹✨" }
+        { text: "Si fueras un meme, serías mi favorito de la galería 😂" },
+        { text: "Asi o mas Claro 🌹✨" }
       ]
     };
     /* ══════════════════════════════════════════ */
@@ -707,29 +762,20 @@
     /* ── SEQUENTIAL STATE ── */
     let msgIndex = 0;
 
-    const dotsRow = document.getElementById('dotsRow');
+    const waterHeart = document.getElementById('waterHeart');
+    const waterFill = document.getElementById('waterFill');
     const msgPreview = document.getElementById('msgPreview');
     const waBtnText = document.getElementById('waBtnText');
     const waBtnIcon = document.getElementById('waBtnIcon');
     const waBtn = document.getElementById('waBtn');
     const toast = document.getElementById('toast');
 
-    // Build dots
-    CONFIG.messages.forEach((_, i) => {
-      const d = document.createElement('span');
-      d.className = 'dot';
-      d.id = `dot-${i}`;
-      dotsRow.appendChild(d);
-    });
-
     function updateUI() {
-      CONFIG.messages.forEach((_, i) => {
-        const d = document.getElementById(`dot-${i}`);
-        d.classList.remove('done', 'final');
-        if (i < msgIndex) {
-          d.classList.add(i === CONFIG.messages.length - 1 ? 'final' : 'done');
-        }
-      });
+      // Calculate fill percentage based on messages sent
+      const percentage = (msgIndex / CONFIG.messages.length) * 100;
+      // top 100% means empty, top 0% means full
+      const topValue = 100 - percentage;
+      waterFill.style.top = topValue + '%';
 
       if (msgIndex >= CONFIG.messages.length) {
         msgPreview.textContent = '¡Le enviaste todos los mensajes! Eres increíble 🌟';
@@ -738,6 +784,7 @@
         waBtn.classList.add('final-glow');
         waBtn.style.pointerEvents = 'none';
         waBtn.style.opacity = '0.7';
+        waterHeart.classList.add('overflow');
       } else {
         msgPreview.textContent = `Mensaje secreto ${msgIndex + 1} de ${CONFIG.messages.length} listo para enviar ❤️`;
         waBtnText.textContent = `Enviar mensaje ${msgIndex + 1}`;
@@ -745,6 +792,7 @@
         waBtn.classList.toggle('final-glow', msgIndex === CONFIG.messages.length - 1);
         waBtn.style.pointerEvents = '';
         waBtn.style.opacity = '';
+        waterHeart.classList.remove('overflow');
       }
     }
     updateUI();
